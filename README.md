@@ -33,7 +33,7 @@ This project aims to provide a smart farm solution for livestock tracking. It ut
 3. Run the Flask application:
 
    ```bash
-   python app.py
+   python frontend/app.py & backend/backend.py -vr backend/cow_move.mp4
    ```
 
 4. Access the application in your web browser at `http://localhost:5000`.
