@@ -1,0 +1,8 @@
+---
+PORT: 8485
+HOST: ''
+USERNAME: 'username'
+PASSWORD: 'password'
+FRAME_RATE: 5
+YOLO_MODEL: yolov8n # Don't change unless you know what you're doing
+
