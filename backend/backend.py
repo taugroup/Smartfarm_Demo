@@ -10,7 +10,7 @@
 #       -vr [video file path] # reads video file path for model prediction and repeats messages until q is pressed
 #       -i [image file path] # reads image file path for model prediction
 
-__author__ = 'Erik Preist'
+__author__ = 'Erik Priest'
 
 import yaml
 import json
@@ -155,7 +155,7 @@ def load_config():
 
     # Try to read data from the config file
     try:
-        with open("settings.yaml", "r") as f:
+        with open("backend/settings.yaml", "r") as f:
             _config = yaml.safe_load(f)
     except IOError as strerror:
         print("I/O error: {0}".format(strerror))
