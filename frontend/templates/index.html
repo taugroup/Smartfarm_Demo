@@ -1,1 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SmartFarm-LivestockTracking</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #1f1f23;
+        }
 
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            color: #94c09e;
+            font-family: "Montserrat", sans-serif;
+            font-size: 4vw; /* Responsive font size */
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(157, 162, 157, 0.3);
+        }
+
+        .box-container {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .paragraph {
+            flex: 1;
+            padding: 10px;
+            color: #676c81;
+            font-family: "Arial", sans-serif;
+            font-size: 15px;
+            text-align: center;
+            height: 35vw;
+            width: 25vw;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin-right: 20px;
+            margin-left: 20px;
+        }
+
+        #box {
+            width: 80vw; /* Responsive width */
+            height: 80vw; /* Responsive height */
+            max-width: 450px; /* Set a maximum width for large screens */
+            max-height: 450px; /* Set a maximum height for large screens */
+            background-image: url("https://i.ibb.co/TrJmfSG/grass.png");
+            background-size: cover;
+            background-position: center;
+            border: 2px solid #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            position: relative;
+        }
+
+        .icon-container {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon {
+            width: 4vw; /* Responsive width */
+            height: 4vw; /* Responsive height */
+            max-width: 42px; /* Set a maximum width for large screens */
+            max-height: 42px; /* Set a maximum height for large screens */
+            border-radius: 20%;
+            padding: 0.2vw; /* Responsive padding */
+            border: 1px solid white; /* Add white border to the icons */
+        }
+
+        .overlay {
+            position: absolute;
+            top: -7vw; /* Responsive position */
+            left: -1vw; /* Responsive position */
+            width: 15vw; /* Responsive width */
+            max-width: 150px; /* Set a maximum width for large screens */
+            background-color: rgba(148, 115, 77, 0.7);
+            color: white;
+            padding: 1vw; /* Responsive padding */
+            border-radius: 5px;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .icon-container:hover .overlay {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            /* Styles for screens up to 768px wide */
+            .header {
+                font-size: 6vw; /* Increase font size for smaller screens */
+            }
+
+            #box {
+                width: 90vw; /* Increase width for smaller screens */
+                height: 90vw; /* Increase height for smaller screens */
+            }
+
+            .icon {
+                width: 8vw; /* Increase icon size for smaller screens */
+                height: 8vw; /* Increase icon size for smaller screens */
+            }
+
+            .overlay {
+                top: -12vw; /* Increase position for smaller screens */
+                width: 25vw; /* Increase width for smaller screens */
+            }
+
+            .paragraph {
+                margin-right: 0; /* Remove right margin for smaller screens */
+                margin-bottom: 20px; /* Add bottom margin for smaller screens */
+            }
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
+
+    <script>
+        var socket = io();
+        var icons = {};
+        socket.on('mqtt_message', function (data) {
+           var outputDiv = document.getElementById("output");
+
+            var payloadStr = data.payload;
+            console.log(payloadStr)
+            if (payloadStr.startsWith("b'") && payloadStr.endsWith("'")) {
+                payloadStr = payloadStr.slice(2, -1);
+            }
+
+            try {
+                var jsonObj = JSON.parse(payloadStr);
+                outputDiv.innerHTML = "<p>" + "Quanity : " + jsonObj.Quantity + "<br>" + "TimeStamp: " + jsonObj.TimeStamp.counter + "<br>" + "Humidity: " + jsonObj.Data.humidity + "<br>" + "Temperature: " + jsonObj.Data.temperature + "<br>" + "Total CO2 Emission: " + jsonObj.Data.co2 + "</p>";
+                var elements = jsonObj.Elements;
+
+                for (var key in elements) {
+                    var element = elements[key];
+                    if (element.hasOwnProperty("location")) {
+                        const locationArray = JSON.parse(element.location);
+                        const [topleft_x, topleft_y, bottomright_x, bottomright_y] = locationArray;
+
+                        var location = {x:(topleft_x + topleft_y) / 2, y:(bottomright_x + bottomright_y) / 2};
+
+                        var co2 = element.data.co2;
+                        var iconContainer = icons[key];
+                        if (!iconContainer) {
+                            iconContainer = document.createElement("div");
+                            iconContainer.className = "icon-container";
+
+                            var icon = document.createElement("img");
+                            icon.className = "icon";
+                            icon.src = "https://i.ibb.co/n177kTF/cow-icon.png"; // Set the image icon URL based on the element key
+                            icon.style.backgroundColor = getRandomColor(); // Set a random background color for the icon
+                            iconContainer.appendChild(icon);
+
+                            var overlay = document.createElement("div");
+                            overlay.className = "overlay";
+                            overlay.innerText = "Element " + key + "\nLocation: (" + location.x.toFixed(2); + ", " + location.y.toFixed(2);+ ")" + "\nCO2:" + co2;
+                            iconContainer.appendChild(overlay);
+
+                            icons[key] = iconContainer;
+
+                            document.getElementById("box").appendChild(iconContainer);
+                        }
+                        const mappedX = mapValue(location.x, 0, 1, 0, 400);
+                        const mappedY = mapValue(location.y, 0, 1, 0, 400);
+                        iconContainer.style.left = mappedX + "px";
+                        iconContainer.style.top = mappedY + "px";
+                    }
+                }
+
+                function mapValue(value, fromMin, fromMax, toMin, toMax) {
+                    return (value - fromMin) * (toMax - toMin) / (fromMax - fromMin) + toMin;
+                }
+
+                function getRandomColor() {
+                    var letters = '0123456789ABCDEF';
+                    var color = '#';
+                    for (var i = 0; i < 6; i++) {
+                        color += letters[Math.floor(Math.random() * 16)];
+                    }
+                    return color;
+                }
+            } catch (e) {
+                console.error("Error parsing JSON:", e);
+            }
+        });
+
+        function parseLocation(locationStr) {
+            var coords = locationStr.slice(1, -1).split(",");
+            var x = parseInt(coords[0]);
+            var y = parseInt(coords[1]);
+            return { x: x, y: y };
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="header">Smart Farm : Livestock Tracking</h1>
+        <div class="box-container">
+            <div class="paragraph">
+                <h2 style="color:cadetblue">About</h2>
+                <ul style="text-align: left; list-style-position: inside;">
+                    <li>This project aims for Smart Farm.</li>
+                    <li>Three-tier approach:</li>
+                    <ul style="text-align: left; list-style-position: inside;">
+                        <li><b>Data collection</b>: from sensors installed in the ranch (Physical twin)</li>
+                        <li><b>Data processing and packaging</b>: uploaded to MQTT server in JSON format</li>
+                        <li><b>Data Visualization</b>: live-tracking and monitoring of the animals</li>
+                    </ul>
+                </ul>
+            </div>
+
+            <div id="box" class="box"></div>
+            <div class="paragraph">
+                <h2 style="color:cadetblue">Info & Instruction</h2>
+                <ul style="text-align: left;">
+                    <li>The animals in a pen are visualized in the green box.</li>
+                    <li>Each animal is assigned a unique color for accessibility.</li>
+                    <li>You may hover on each animal to read their respective information as received from the sensors.</li>
+                </ul>
+                <h2 style="color:cadetblue">Data</h2>
+                <div id="output"></div>
+            </div>
+
+        </div>
+    </div>
+</body>
+
+</html>
