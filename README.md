@@ -4,8 +4,8 @@ This project aims to provide a smart farm solution for livestock tracking. It ut
 
 ## Features
 
-- Real-time tracking and monitoring of livestock in a farm
-- Display of individual animal information, including quantity, timestamp, humidity, temperature, and total CO2 emission
+- Real-time tracking and monitoring of livestock on a farm
+- Display of individual animal information, including other sensors deployed.
 - Unique color assignment for each animal for easy identification
 
 ## Technologies Used
@@ -16,7 +16,7 @@ This project aims to provide a smart farm solution for livestock tracking. It ut
 
 - MQTT (message queuing protocol): MQTT is used as the communication protocol for transmitting data between the sensors and the visualization system.
 
-- HTML/CSS/JavaScript (for the frontend visualization): These web technologies are used to create an interactive and user-friendly interface for visualizing the livestock data.
+- HTML/CSS/JavaScript (for the frontend visualization): These web technologies are used to create an interactive and user-friendly interface for visualizing livestock data.
 
 ## Installation
 
