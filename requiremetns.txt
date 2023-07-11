@@ -1,5 +1,0 @@
-paho-mqtt
-flask-socketio
-Flask
-ultralytics
-opencv-python
