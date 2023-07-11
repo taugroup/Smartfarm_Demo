@@ -24,6 +24,9 @@ import paho.mqtt.client as paho
 from paho import mqtt
 import tracking
 
+_my_uuid = ""
+
+
 ## Start: MQTT callbacks ##
 def on_connect(client, userdata, flags, rc, properties=None):
     print("CONNACK received with code %s." % rc)
@@ -49,7 +52,7 @@ def on_message(client, userdata, msg):
 
 
 def publish_data(json_msg):
-    ret = client.publish("taugroup/smart_farm", json_msg, qos=1)
+    ret = client.publish("taugroup/{uuid}".format(uuid=_my_uuid), json_msg, qos=1)
     return ret
 
 
@@ -104,7 +107,7 @@ def video_predict(model, path):
             json_raw = tracking.write_json(results, counter, frame.shape)
             json_msg = json.dumps(json_raw)
             json_data.append(json_msg)
-            client.publish("taugroup/smart_farm", json_msg, qos=1)
+            client.publish("taugroup/{uuid}".format(uuid=_my_uuid), json_msg, qos=1)
             counter += 1
 
     try:
@@ -187,11 +190,13 @@ if __name__ == '__main__':
     ##
 
     json_msg = []
+    _my_uuid = 'smart_farm'
 
     # sys args
     if len(sys.argv) > 1:
         command = sys.argv[1]  # extract command
         file_path = sys.argv[2]
+        _my_uuid = sys.argv[4]
 
         if command == "-v":
             # run video prediction
