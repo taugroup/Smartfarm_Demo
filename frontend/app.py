@@ -58,7 +58,7 @@ if __name__ == '__main__':
 
     client.tls_set(tls_version=mqtt.ssl.PROTOCOL_TLS)
     client.username_pw_set("taugroup", "TAUGroup2023")
-    client.connect("385660998355465faf56ba893a544dcf", 8883)
+    client.connect("385660998355465faf56ba893a544dcf.s1.eu.hivemq.cloud", 8883)
 
     client.loop_start()
     socketio.run(app, host='127.0.0.1', port=5000)
