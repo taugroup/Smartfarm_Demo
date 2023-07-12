@@ -179,15 +179,13 @@ if __name__ == '__main__':
     client.on_connect = on_connect  # Add callback
 
     client.tls_set(tls_version=mqtt.client.ssl.PROTOCOL_TLS)
-    client.username_pw_set("nistai3", "nistpscrai3")
-    client.connect("030a29b11d714f4dae6fb60c9ab4a2c5.s1.eu.hivemq.cloud", 8883)
+    client.username_pw_set("taugroup", "TAUGroup2023")
+    client.connect("385660998355465faf56ba893a544dcf.s1.eu.hivemq.cloud", 8883)
 
     client.on_subscribe = on_subscribe
     client.on_message = on_message
     client.on_publish = on_publish
     client.on_disconnect = on_disconnect
-
-    ##
 
     json_msg = []
     _my_uuid = 'smart_farm'
