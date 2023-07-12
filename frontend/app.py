@@ -57,13 +57,8 @@ if __name__ == '__main__':
     client.on_message = on_message
 
     client.tls_set(tls_version=mqtt.ssl.PROTOCOL_TLS)
-    client.username_pw_set("nistai3", "nistpscrai3")
-    client.connect("030a29b11d714f4dae6fb60c9ab4a2c5.s1.eu.hivemq.cloud", 8883)
-
-    
+    client.username_pw_set("taugroup", "TAUGroup2023")
+    client.connect("385660998355465faf56ba893a544dcf", 8883)
 
     client.loop_start()
     socketio.run(app, host='127.0.0.1', port=5000)
-
-
-# google colab, ngrock
