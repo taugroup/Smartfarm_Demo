@@ -3,3 +3,4 @@ flask-socketio
 Flask
 ultralytics
 opencv-python
+simple-websocket
