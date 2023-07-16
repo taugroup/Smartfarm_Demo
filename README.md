@@ -41,7 +41,7 @@ This project aims to provide a smart farm solution for livestock tracking. It ut
 4. Run both the backend and frontend applications:
 
    ```bash
-   python frontend/app.py & backend/backend.py -vr backend/cow_move.mp4
+   python frontend/app.py & python backend/backend.py -vr backend/cow_move.mp4
    ```
 
 5. Access the application in your web browser at `http://localhost:5000`.
