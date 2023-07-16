@@ -26,19 +26,25 @@ This project aims to provide a smart farm solution for livestock tracking. It ut
    git clone https://github.com/taugroup/Smartfarm_Demo.git
    ```
 
-2. Install the required dependencies:
+2. Create a Python eirtual environment and activate it:
+
+   ```bash
+   python -m venv venv
+   source venv/bin/activate
+   
+3. Install the required dependencies:
 
    ```bash
    pip install -r requirements.txt
    ```
 
-3. Run both the backend and frontend applications:
+4. Run both the backend and frontend applications:
 
    ```bash
    python frontend/app.py & backend/backend.py -vr backend/cow_move.mp4
    ```
 
-4. Access the application in your web browser at `http://localhost:5000`.
+5. Access the application in your web browser at `http://localhost:5000`.
 
 ## Usage
 
